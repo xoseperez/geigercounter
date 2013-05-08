@@ -24,8 +24,6 @@
 // Configuration
 // ===========================================
 
-//#define DEBUG
-
 #define GEIGER_INTERRUPT 0
 #define DEBUG_PIN 7
 #define LCD_PIN 4
@@ -33,6 +31,7 @@
 
 #define PERIOD_LENGTH 60000
 #define UPDATES_PER_PERIOD 10
+#define CPM_TO_USVH_RATIO 0.0057
 
 // ===========================================
 // Globals
@@ -42,7 +41,7 @@ volatile unsigned long pulses = 0;
 unsigned long ring[UPDATES_PER_PERIOD] = {0};
 byte pointer = 0;
 unsigned long next_update = 0;
-char tmp[10];
+boolean warmup = true;
 
 SoftwareSerial lcd(0, LCD_PIN);
 SoftwareSerial xbee(0, XBEE_PIN);
@@ -59,13 +58,16 @@ void pulse() {
 // Methods
 // ===========================================
 
-void clear_lcd() {
+void lcd_setCursor(byte col, byte row) {
     lcd.write(254);
-    lcd.write(128);
+    lcd.write(128 + 64 * row + col);
+}
+
+void lcd_clear() {
+    lcd_setCursor(0, 0);
     lcd.write("                ");
     lcd.write("                ");
-    lcd.write(254);
-    lcd.write(128);
+    lcd_setCursor(0, 0);
 }
 
 void showCPM() {
@@ -79,24 +81,36 @@ void showCPM() {
     for (byte i=0; i < UPDATES_PER_PERIOD; i++) {
         cpm += ring[i];
     }
-    float usvh = cpm * 0.0057;
+    float usvh = cpm * CPM_TO_USVH_RATIO;
 
     // Showing data in LCD
-    clear_lcd();
-    lcd.print(F("CPM:    "));
-    lcd.print(cpm, DEC);
-    lcd.write(254);
-    lcd.write(192);
-    lcd.print(F("uSv/hr: "));
-    lcd.print(usvh, 3);
+    if (warmup) {
+        lcd_setCursor(0, 1);
+        lcd.print(cpm, DEC);
+    } else {
+        lcd_clear();
+        lcd.print(F("CPM:    "));
+        lcd.print(cpm, DEC);
+        lcd_setCursor(0, 1);
+        lcd.print(F("uSv/h: "));
+        lcd.print(usvh, 3);
+    }
 
-    // Sending data
-    if (pointer==0) {
+    // Sending data through the XBee
+    if (pointer == 0) {
+
         digitalWrite(DEBUG_PIN, HIGH);
         xbee.print(F("cpm:"));
         xbee.println(cpm, DEC);
         delay(20);
+        //xbee.print(F("usvh:"));
+        //xbee.println(usvh, 3);
+        //delay(20);
         digitalWrite(DEBUG_PIN, LOW);
+
+        // Finish the warmup after the first full period
+        warmup = false;
+
     }
 
 }
@@ -110,6 +124,10 @@ void setup() {
     lcd.begin(9600);
     xbee.begin(9600);
     delay(500);
+
+    // Show warmup message
+    lcd_clear();
+    lcd.println(F("Warming up..."));
 
     // Send welcome message
     xbee.println(F("status:1"));
