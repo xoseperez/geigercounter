@@ -19,6 +19,8 @@
 */
 
 #include <SoftwareSerial.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
 // ===========================================
 // Configuration
@@ -26,7 +28,6 @@
 
 #define GEIGER_INTERRUPT 0
 #define DEBUG_PIN 7
-#define LCD_PIN 4
 #define XBEE_PIN 9
 
 #define PERIOD_LENGTH 60000
@@ -43,8 +44,19 @@ byte pointer = 0;
 unsigned long next_update = 0;
 boolean warmup = true;
 
-SoftwareSerial lcd(0, LCD_PIN);
 SoftwareSerial xbee(0, XBEE_PIN);
+
+// Thanks to Riva for pointing out the wrong ping order
+// http://arduino.cc/forum/index.php?topic=164722.0
+// 0 -> RS
+// 1 -> RW
+// 2 -> EN
+// 3 -> LED
+// 4- > D4
+// 5 -> D5
+// 6 -> D6
+// 7 -> D7
+LiquidCrystal_I2C lcd(0x20, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 // ===========================================
 // Interrupt routines
@@ -58,25 +70,13 @@ void pulse() {
 // Methods
 // ===========================================
 
-void lcd_setCursor(byte col, byte row) {
-    lcd.write(254);
-    lcd.write(128 + 64 * row + col);
-}
-
-void lcd_clear() {
-    lcd_setCursor(0, 0);
-    lcd.write("                ");
-    lcd.write("                ");
-    lcd_setCursor(0, 0);
-}
-
 void showCPM() {
 
     // Calculating the CPM and uSvr/hr
     ring[pointer] = pulses;
     pulses = 0;
     pointer = (pointer + 1) % UPDATES_PER_PERIOD;
-    
+
     unsigned long cpm = 0;
     for (byte i=0; i < UPDATES_PER_PERIOD; i++) {
         cpm += ring[i];
@@ -85,13 +85,13 @@ void showCPM() {
 
     // Showing data in LCD
     if (warmup) {
-        lcd_setCursor(0, 1);
+        lcd.setCursor(0, 1);
         lcd.print(cpm, DEC);
     } else {
-        lcd_clear();
-        lcd.print(F("CPM:    "));
+        lcd.clear();
+        lcd.print(F("CPM:   "));
         lcd.print(cpm, DEC);
-        lcd_setCursor(0, 1);
+        lcd.setCursor(0, 1);
         lcd.print(F("uSv/h: "));
         lcd.print(usvh, 3);
     }
@@ -103,9 +103,9 @@ void showCPM() {
         xbee.print(F("cpm:"));
         xbee.println(cpm, DEC);
         delay(20);
-        //xbee.print(F("usvh:"));
-        //xbee.println(usvh, 3);
-        //delay(20);
+        xbee.print(F("usvh:"));
+        xbee.println(usvh, 3);
+        delay(20);
         digitalWrite(DEBUG_PIN, LOW);
 
         // Finish the warmup after the first full period
@@ -121,13 +121,14 @@ void setup() {
     digitalWrite(DEBUG_PIN, LOW);
 
     // Initilize LCD and XBEE
-    lcd.begin(9600);
+    lcd.begin(16,2);
+    lcd.setBacklight(BACKLIGHT_ON);
     xbee.begin(9600);
     delay(500);
 
     // Show warmup message
-    lcd_clear();
-    lcd.println(F("Warming up..."));
+    lcd.home();
+    lcd.print(F("Warming up..."));
 
     // Send welcome message
     xbee.println(F("status:1"));
