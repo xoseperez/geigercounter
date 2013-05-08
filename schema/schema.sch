@@ -10793,10 +10793,11 @@ Source: www.kingbright.com</description>
 <part name="C4" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
 <part name="C5" library="rcl" deviceset="C-EU" device="025-025X050" value="22pF"/>
 <part name="C6" library="rcl" deviceset="C-EU" device="025-025X050" value="330nF"/>
-<part name="D1" library="diode" deviceset="BZX85" device="" value="BZX85C3V3"/>
+<part name="BZX85C3V3" library="diode" deviceset="BZX85" device="" value="D1"/>
 <part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="10K"/>
 <part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="10K"/>
 <part name="LED1" library="led" deviceset="LED" device="3MM"/>
+<part name="R3" library="resistor" deviceset="R-EU_" device="0207/10" value="30K"/>
 </parts>
 <sheets>
 <sheet>
@@ -10816,11 +10817,12 @@ Source: www.kingbright.com</description>
 <instance part="C3" gate="G$1" x="124.46" y="35.56"/>
 <instance part="C4" gate="G$1" x="15.24" y="58.42" rot="R90"/>
 <instance part="C5" gate="G$1" x="15.24" y="48.26" rot="R90"/>
-<instance part="C6" gate="G$1" x="170.18" y="40.64"/>
-<instance part="D1" gate="D" x="129.54" y="76.2" rot="R180"/>
+<instance part="C6" gate="G$1" x="170.18" y="38.1"/>
+<instance part="BZX85C3V3" gate="D" x="121.92" y="71.12" rot="R180"/>
 <instance part="R1" gate="G$1" x="27.94" y="91.44" rot="R90"/>
 <instance part="R2" gate="G$1" x="109.22" y="45.72" rot="R90"/>
 <instance part="LED1" gate="G$1" x="109.22" y="35.56"/>
+<instance part="R3" gate="G$1" x="129.54" y="76.2" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -10922,9 +10924,10 @@ Source: www.kingbright.com</description>
 <wire x1="149.86" y1="33.02" x2="149.86" y2="30.48" width="0.2032" layer="91"/>
 <pinref part="C6" gate="G$1" pin="2"/>
 <wire x1="149.86" y1="30.48" x2="149.86" y2="25.4" width="0.2032" layer="91"/>
-<wire x1="170.18" y1="35.56" x2="170.18" y2="30.48" width="0.2032" layer="91"/>
+<wire x1="170.18" y1="33.02" x2="170.18" y2="30.48" width="0.2032" layer="91"/>
 <wire x1="170.18" y1="30.48" x2="149.86" y2="30.48" width="0.2032" layer="91"/>
 <label x="149.86" y="25.4" size="1.778" layer="95"/>
+<junction x="149.86" y="30.48"/>
 </segment>
 <segment>
 <pinref part="RADIO" gate="G$1" pin="GND"/>
@@ -11046,36 +11049,33 @@ Source: www.kingbright.com</description>
 </net>
 <net name="3V3" class="0">
 <segment>
-<pinref part="REGULATOR" gate="G$1" pin="O"/>
-<wire x1="160.02" y1="43.18" x2="170.18" y2="43.18" width="0.2032" layer="91"/>
-<label x="177.8" y="43.18" size="1.778" layer="95"/>
-<pinref part="C6" gate="G$1" pin="1"/>
-<wire x1="170.18" y1="43.18" x2="177.8" y2="43.18" width="0.2032" layer="91"/>
-<junction x="170.18" y="43.18"/>
-</segment>
-<segment>
 <pinref part="RADIO" gate="G$1" pin="VDD"/>
 <wire x1="137.16" y1="81.28" x2="129.54" y2="81.28" width="0.2032" layer="91"/>
-<label x="129.54" y="81.28" size="1.778" layer="95"/>
+<label x="121.92" y="81.28" size="1.778" layer="95"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="129.54" y1="81.28" x2="121.92" y2="81.28" width="0.2032" layer="91"/>
+<junction x="129.54" y="81.28"/>
 </segment>
 <segment>
 <pinref part="C3" gate="G$1" pin="1"/>
 <wire x1="124.46" y1="38.1" x2="124.46" y2="43.18" width="0.2032" layer="91"/>
 <label x="124.46" y="43.18" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="N$4" class="0">
 <segment>
-<pinref part="RADIO" gate="G$1" pin="DIN"/>
-<pinref part="D1" gate="D" pin="A"/>
-<wire x1="137.16" y1="76.2" x2="132.08" y2="76.2" width="0.2032" layer="91"/>
+<pinref part="REGULATOR" gate="G$1" pin="O"/>
+<wire x1="160.02" y1="43.18" x2="170.18" y2="43.18" width="0.2032" layer="91"/>
+<pinref part="C6" gate="G$1" pin="1"/>
+<wire x1="170.18" y1="43.18" x2="175.26" y2="43.18" width="0.2032" layer="91"/>
+<wire x1="170.18" y1="40.64" x2="170.18" y2="43.18" width="0.2032" layer="91"/>
+<junction x="170.18" y="43.18"/>
+<label x="175.26" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="XBEE" class="0">
 <segment>
-<pinref part="D1" gate="D" pin="C"/>
-<wire x1="127" y1="76.2" x2="109.22" y2="76.2" width="0.2032" layer="91"/>
-<label x="109.22" y="76.2" size="1.778" layer="95"/>
+<pinref part="BZX85C3V3" gate="D" pin="C"/>
+<wire x1="119.38" y1="71.12" x2="111.76" y2="71.12" width="0.2032" layer="91"/>
+<label x="111.76" y="71.12" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PB1(OC1A)"/>
@@ -11100,6 +11100,18 @@ Source: www.kingbright.com</description>
 <pinref part="R2" gate="G$1" pin="1"/>
 <pinref part="LED1" gate="G$1" pin="A"/>
 <wire x1="109.22" y1="40.64" x2="109.22" y2="38.1" width="0.2032" layer="91"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="RADIO" gate="G$1" pin="DIN"/>
+<wire x1="137.16" y1="76.2" x2="134.62" y2="76.2" width="0.2032" layer="91"/>
+<wire x1="134.62" y1="76.2" x2="134.62" y2="71.12" width="0.2032" layer="91"/>
+<pinref part="BZX85C3V3" gate="D" pin="A"/>
+<wire x1="134.62" y1="71.12" x2="129.54" y2="71.12" width="0.2032" layer="91"/>
+<pinref part="R3" gate="G$1" pin="1"/>
+<junction x="129.54" y="71.12"/>
+<wire x1="129.54" y1="71.12" x2="124.46" y2="71.12" width="0.2032" layer="91"/>
 </segment>
 </net>
 </nets>
