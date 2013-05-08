@@ -29,19 +29,23 @@
 #define GEIGER_INTERRUPT 0
 #define DEBUG_PIN 7
 #define LCD_PIN 4
+#define XBEE_PIN 9
 
-#define REPORTS_PER_MINUTE 10
+#define PERIOD_LENGTH 60000
+#define UPDATES_PER_PERIOD 10
 
 // ===========================================
 // Globals
 // ===========================================
 
 volatile unsigned long pulses = 0;
-unsigned long ring[REPORTS_PER_MINUTE] = {0};
+unsigned long ring[UPDATES_PER_PERIOD] = {0};
 byte pointer = 0;
 unsigned long next_update = 0;
+char tmp[10];
 
 SoftwareSerial lcd(0, LCD_PIN);
+SoftwareSerial xbee(0, XBEE_PIN);
 
 // ===========================================
 // Interrupt routines
@@ -66,29 +70,34 @@ void clear_lcd() {
 
 void showCPM() {
 
-    // Calculating the watts to report
-    ring[pointer++] = pulses;
+    // Calculating the CPM and uSvr/hr
+    ring[pointer] = pulses;
     pulses = 0;
-    if (pointer == REPORTS_PER_MINUTE) pointer=0;
+    pointer = (pointer + 1) % UPDATES_PER_PERIOD;
+    
     unsigned long cpm = 0;
-    for (byte i=0; i < REPORTS_PER_MINUTE; i++) {
+    for (byte i=0; i < UPDATES_PER_PERIOD; i++) {
         cpm += ring[i];
     }
-
     float usvh = cpm * 0.0057;
-    int usvh_i = usvh;
-    int usvh_f = (usvh - usvh_i) * 1000;
 
-    // Sending data
+    // Showing data in LCD
     clear_lcd();
-    lcd.print("CPM: ");
+    lcd.print(F("CPM:    "));
     lcd.print(cpm, DEC);
     lcd.write(254);
     lcd.write(192);
-    lcd.print("uSv/hr: ");
-    lcd.print(usvh_i, DEC);
-    lcd.print(".");
-    lcd.print(usvh_f, DEC);
+    lcd.print(F("uSv/hr: "));
+    lcd.print(usvh, 3);
+
+    // Sending data
+    if (pointer==0) {
+        digitalWrite(DEBUG_PIN, HIGH);
+        xbee.print(F("cpm:"));
+        xbee.println(cpm, DEC);
+        delay(20);
+        digitalWrite(DEBUG_PIN, LOW);
+    }
 
 }
 
@@ -97,19 +106,19 @@ void setup() {
     pinMode(DEBUG_PIN, OUTPUT);
     digitalWrite(DEBUG_PIN, LOW);
 
-    // Initilize LCD
+    // Initilize LCD and XBEE
     lcd.begin(9600);
+    xbee.begin(9600);
     delay(500);
 
-    Serial.begin(9600);
-
     // Send welcome message
+    xbee.println(F("status:1"));
 
     // Allow pulse to trigger interrupt on rising
     attachInterrupt(GEIGER_INTERRUPT, pulse, RISING);
 
     // Calculate next update
-    next_update = millis() + 60000 / REPORTS_PER_MINUTE;
+    next_update = millis() + PERIOD_LENGTH / UPDATES_PER_PERIOD;
 
 }
 
@@ -117,10 +126,8 @@ void loop() {
 
     // Check if I have to send a report
     if (millis() > next_update) {
-        digitalWrite(DEBUG_PIN, HIGH);
-        next_update = millis() + 60000 / REPORTS_PER_MINUTE;
+        next_update = millis() + PERIOD_LENGTH / UPDATES_PER_PERIOD;
         showCPM();
-        digitalWrite(DEBUG_PIN, LOW);
     }
 
 }

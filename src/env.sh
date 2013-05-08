@@ -1,3 +1,3 @@
 export ARDUINODIR=~/local/arduino/
-export BOARD=pro328
+export BOARD=uno
 export SERIALDEV=/dev/ttyUSB0
