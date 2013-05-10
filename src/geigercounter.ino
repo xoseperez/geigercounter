@@ -27,8 +27,8 @@
 // ===========================================
 
 #define GEIGER_INTERRUPT 0
-#define DEBUG_PIN 7
-#define XBEE_PIN 9
+#define DEBUG_PIN 9
+#define XBEE_PIN 12
 
 #define PERIOD_LENGTH 60000
 #define UPDATES_PER_PERIOD 10

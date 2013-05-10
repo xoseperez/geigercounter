@@ -10795,7 +10795,7 @@ Source: www.kingbright.com</description>
 <part name="C6" library="rcl" deviceset="C-EU" device="025-025X050" value="330nF"/>
 <part name="BZX85C3V3" library="diode" deviceset="BZX85" device="" value="D1"/>
 <part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="10K"/>
-<part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="10K"/>
+<part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="1K"/>
 <part name="LED1" library="led" deviceset="LED" device="3MM"/>
 <part name="R3" library="resistor" deviceset="R-EU_" device="0207/10" value="30K"/>
 </parts>
@@ -11078,21 +11078,21 @@ Source: www.kingbright.com</description>
 <label x="111.76" y="71.12" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="MUC" gate="G$1" pin="PB1(OC1A)"/>
-<wire x1="86.36" y1="33.02" x2="91.44" y2="33.02" width="0.2032" layer="91"/>
-<label x="91.44" y="33.02" size="1.778" layer="95"/>
+<pinref part="MUC" gate="G$1" pin="PB4(MISO)"/>
+<wire x1="86.36" y1="25.4" x2="91.44" y2="25.4" width="0.1524" layer="91"/>
+<label x="91.44" y="25.4" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED" class="0">
 <segment>
-<pinref part="MUC" gate="G$1" pin="PB5(SCK)"/>
-<wire x1="86.36" y1="22.86" x2="91.44" y2="22.86" width="0.2032" layer="91"/>
-<label x="91.44" y="22.86" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="109.22" y1="50.8" x2="109.22" y2="55.88" width="0.2032" layer="91"/>
 <label x="109.22" y="55.88" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="MUC" gate="G$1" pin="PB1(OC1A)"/>
+<wire x1="86.36" y1="33.02" x2="91.44" y2="33.02" width="0.1524" layer="91"/>
+<label x="91.44" y="33.02" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$5" class="0">
