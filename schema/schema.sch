@@ -10849,26 +10849,26 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </net>
 <net name="TXD" class="0">
 <segment>
-<pinref part="FTDI" gate="G$1" pin="4"/>
-<wire x1="-15.24" y1="76.2" x2="-10.16" y2="76.2" width="0.2032" layer="91"/>
-<label x="-10.16" y="76.2" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="MUC" gate="G$1" pin="PD1(TXD)"/>
 <wire x1="86.36" y1="55.88" x2="91.44" y2="55.88" width="0.2032" layer="91"/>
 <label x="91.44" y="55.88" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="RXD" class="0">
 <segment>
 <pinref part="FTDI" gate="G$1" pin="5"/>
 <wire x1="-15.24" y1="78.74" x2="-10.16" y2="78.74" width="0.2032" layer="91"/>
 <label x="-10.16" y="78.74" size="1.778" layer="95"/>
 </segment>
+</net>
+<net name="RXD" class="0">
 <segment>
 <pinref part="MUC" gate="G$1" pin="PD0(RXD)"/>
 <wire x1="86.36" y1="58.42" x2="91.44" y2="58.42" width="0.2032" layer="91"/>
 <label x="91.44" y="58.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="FTDI" gate="G$1" pin="4"/>
+<wire x1="-15.24" y1="76.2" x2="-10.16" y2="76.2" width="0.2032" layer="91"/>
+<label x="-10.16" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DTR" class="0">
