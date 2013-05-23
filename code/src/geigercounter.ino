@@ -26,27 +26,48 @@
 // Configuration
 // ===========================================
 
+// pin definitions
 #define GEIGER_INTERRUPT 0
 #define DEBUG_PIN 9
 #define XBEE_PIN 12
 
+// count data for a whole minute (60000 milliseconds)
+// split into 10 chunks of 6 seconds each
 #define PERIOD_LENGTH 60000
 #define UPDATES_PER_PERIOD 10
-#define CPM_TO_USVH_RATIO 0.0057
+
+// conversion factor from CPM to uSv/h based on data from Libellium for the SBM-20 tube
+// http://www.cooking-hacks.com/index.php/documentation/tutorials/geiger-counter-arduino-radiation-sensor-board
+#define CPM_TO_USVH 0.0057
+
 
 // ===========================================
 // Globals
 // ===========================================
 
+// pulses in the current subperiod
 volatile unsigned long pulses = 0;
+
+// stores the pulses for a set of 6 seconds periods
 unsigned long ring[UPDATES_PER_PERIOD] = {0};
+
+// pointer to the next cell in the ring to update
 byte pointer = 0;
+
+// keeps the sum of counts for the ring
+unsigned long cpm = 0;
+
+// time of the next update
 unsigned long next_update = 0;
+
+// during the first minute after a reset, the display shows a "warming up" message
 boolean warmup = true;
 
+// serial link to the radio
 SoftwareSerial xbee(0, XBEE_PIN);
 
-// Thanks to Riva for pointing out the wrong ping order
+// LCD management
+// Thanks to Riva for pointing out the wrong pin order
 // http://arduino.cc/forum/index.php?topic=164722.0
 // 0 -> RS
 // 1 -> RW
@@ -56,12 +77,25 @@ SoftwareSerial xbee(0, XBEE_PIN);
 // 5 -> D5
 // 6 -> D6
 // 7 -> D7
+//
+// Constructor with backlight control
+// LiquidCrystal_I2C(uint8_t lcd_Addr, uint8_t En, uint8_t Rw, uint8_t Rs,.
+//                  uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7,
+//                  uint8_t backlighPin, t_backlighPol pol);
 LiquidCrystal_I2C lcd(0x20, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 // ===========================================
 // Interrupt routines
 // ===========================================
 
+/**
+ * pulse
+ *
+ * Called on every LOW-to-HIGH transition on the 
+ * GEIGER_INTERRUPT pin. It updates the current count.
+ *
+ * @return void
+ */
 void pulse() {
     ++pulses;
 }
@@ -70,83 +104,115 @@ void pulse() {
 // Methods
 // ===========================================
 
-void showCPM() {
+/**
+ * update
+ *
+ * Updates the ring and CPM count.
+ * Shows the results on the LCD and sends them through radio every minute.
+ *
+ * @return void
+ */
+void update() {
 
-    // Calculating the CPM and uSvr/hr
+    // calculate the moving sum of counts
+    cpm = cpm - ring[pointer] + pulses;
+
+    // store the current period value
     ring[pointer] = pulses;
+
+    // reset the interrupt counter
     pulses = 0;
+
+    // move the pointer to the next position in the ring
     pointer = (pointer + 1) % UPDATES_PER_PERIOD;
 
-    unsigned long cpm = 0;
-    for (byte i=0; i < UPDATES_PER_PERIOD; i++) {
-        cpm += ring[i];
-    }
-    float usvh = cpm * CPM_TO_USVH_RATIO;
+    // calculate the uSv/h 
+    float usvh = cpm * CPM_TO_USVH;
 
-    // Showing data in LCD
+    // show data in LCD
     if (warmup) {
+
         lcd.setCursor(0, 1);
         lcd.print(cpm, DEC);
+
     } else {
+
         lcd.clear();
         lcd.print(F("CPM:   "));
         lcd.print(cpm, DEC);
         lcd.setCursor(0, 1);
         lcd.print(F("uSv/h: "));
         lcd.print(usvh, 3);
+
     }
 
-    // Sending data through the XBee
+    // send data through radio everytime the ring loops back
     if (pointer == 0) {
 
         digitalWrite(DEBUG_PIN, HIGH);
+
         xbee.print(F("cpm:"));
         xbee.println(cpm, DEC);
         delay(20);
         xbee.print(F("usvh:"));
         xbee.println(usvh, 3);
         delay(20);
+
         digitalWrite(DEBUG_PIN, LOW);
 
-        // Finish the warmup after the first full period
+        // finish the warmup after the first full period
         warmup = false;
 
     }
 
 }
 
+/**
+ * setup
+ *
+ * Configures pins, LCD and XBee. Sets up interrups.
+ *
+ * @return void
+ */
 void setup() {
 
     pinMode(DEBUG_PIN, OUTPUT);
     digitalWrite(DEBUG_PIN, LOW);
 
-    // Initilize LCD and XBEE
+    // initilize LCD and XBEE
     lcd.begin(16,2);
     lcd.setBacklight(BACKLIGHT_ON);
     xbee.begin(9600);
     delay(500);
 
-    // Show warmup message
+    // show warmup message
     lcd.home();
     lcd.print(F("Warming up..."));
 
-    // Send welcome message
+    // send welcome message
     xbee.println(F("status:1"));
 
-    // Allow pulse to trigger interrupt on rising
+    // allow pulse to trigger interrupt on rising
     attachInterrupt(GEIGER_INTERRUPT, pulse, RISING);
 
-    // Calculate next update
+    // calculate next update
     next_update = millis() + PERIOD_LENGTH / UPDATES_PER_PERIOD;
 
 }
 
+/**
+ * loop
+ *
+ * Continuously checks for the next update time.
+ *
+ * @return void
+ */
 void loop() {
 
-    // Check if I have to send a report
+    // check if I have to update the info
     if (millis() > next_update) {
         next_update = millis() + PERIOD_LENGTH / UPDATES_PER_PERIOD;
-        showCPM();
+        update();
     }
 
 }
