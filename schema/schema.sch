@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -10812,7 +10812,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <plain>
 </plain>
 <instances>
-<instance part="MUC" gate="G$1" x="60.96" y="55.88"/>
+<instance part="MUC" gate="G$1" x="63.5" y="55.88"/>
 <instance part="RADIO" gate="G$1" x="157.48" y="71.12"/>
 <instance part="GEIGER" gate="G$1" x="-22.86" y="50.8"/>
 <instance part="LCD" gate="G$1" x="-20.32" y="27.94"/>
@@ -10843,14 +10843,14 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PD2(INT0)"/>
-<wire x1="86.36" y1="53.34" x2="91.44" y2="53.34" width="0.2032" layer="91"/>
+<wire x1="88.9" y1="53.34" x2="91.44" y2="53.34" width="0.2032" layer="91"/>
 <label x="91.44" y="53.34" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TXD" class="0">
 <segment>
 <pinref part="MUC" gate="G$1" pin="PD1(TXD)"/>
-<wire x1="86.36" y1="55.88" x2="91.44" y2="55.88" width="0.2032" layer="91"/>
+<wire x1="88.9" y1="55.88" x2="91.44" y2="55.88" width="0.2032" layer="91"/>
 <label x="91.44" y="55.88" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -10862,7 +10862,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <net name="RXD" class="0">
 <segment>
 <pinref part="MUC" gate="G$1" pin="PD0(RXD)"/>
-<wire x1="86.36" y1="58.42" x2="91.44" y2="58.42" width="0.2032" layer="91"/>
+<wire x1="88.9" y1="58.42" x2="91.44" y2="58.42" width="0.2032" layer="91"/>
 <label x="91.44" y="58.42" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -10913,8 +10913,8 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <segment>
 <pinref part="MUC" gate="G$1" pin="GND@2"/>
 <pinref part="MUC" gate="G$1" pin="GND@1"/>
-<wire x1="38.1" y1="25.4" x2="38.1" y2="27.94" width="0.2032" layer="91"/>
-<wire x1="38.1" y1="27.94" x2="33.02" y2="27.94" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="25.4" x2="40.64" y2="27.94" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="27.94" x2="33.02" y2="27.94" width="0.2032" layer="91"/>
 <label x="33.02" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -10972,8 +10972,8 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <segment>
 <pinref part="MUC" gate="G$1" pin="VCC"/>
 <pinref part="MUC" gate="G$1" pin="AVCC"/>
-<wire x1="38.1" y1="73.66" x2="38.1" y2="76.2" width="0.2032" layer="91"/>
-<wire x1="38.1" y1="76.2" x2="33.02" y2="76.2" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="73.66" x2="40.64" y2="76.2" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="76.2" x2="33.02" y2="76.2" width="0.2032" layer="91"/>
 <label x="33.02" y="76.2" size="1.778" layer="95"/>
 </segment>
 <segment>
@@ -10996,7 +10996,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PC6(/RESET)"/>
 <pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="38.1" y1="81.28" x2="27.94" y2="81.28" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="81.28" x2="27.94" y2="81.28" width="0.2032" layer="91"/>
 <pinref part="RESET" gate="S" pin="4"/>
 <wire x1="27.94" y1="81.28" x2="15.24" y2="81.28" width="0.2032" layer="91"/>
 <wire x1="27.94" y1="81.28" x2="27.94" y2="76.2" width="0.2032" layer="91"/>
@@ -11010,7 +11010,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <net name="N$2" class="0">
 <segment>
 <pinref part="MUC" gate="G$1" pin="PB6(XTAL1/TOSC1)"/>
-<wire x1="38.1" y1="55.88" x2="35.56" y2="55.88" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="55.88" x2="35.56" y2="55.88" width="0.2032" layer="91"/>
 <wire x1="35.56" y1="55.88" x2="35.56" y2="58.42" width="0.2032" layer="91"/>
 <pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="35.56" y1="58.42" x2="30.48" y2="58.42" width="0.2032" layer="91"/>
@@ -11022,7 +11022,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <net name="N$3" class="0">
 <segment>
 <pinref part="MUC" gate="G$1" pin="PB7(XTAL2/TOSC2)"/>
-<wire x1="38.1" y1="50.8" x2="35.56" y2="50.8" width="0.2032" layer="91"/>
+<wire x1="40.64" y1="50.8" x2="35.56" y2="50.8" width="0.2032" layer="91"/>
 <wire x1="35.56" y1="50.8" x2="35.56" y2="48.26" width="0.2032" layer="91"/>
 <pinref part="C5" gate="G$1" pin="2"/>
 <wire x1="35.56" y1="48.26" x2="30.48" y2="48.26" width="0.2032" layer="91"/>
@@ -11039,7 +11039,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PC5(ADC5/SCL)"/>
-<wire x1="86.36" y1="68.58" x2="91.44" y2="68.58" width="0.2032" layer="91"/>
+<wire x1="88.9" y1="68.58" x2="91.44" y2="68.58" width="0.2032" layer="91"/>
 <label x="91.44" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
@@ -11051,7 +11051,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PC4(ADC4/SDA)"/>
-<wire x1="86.36" y1="71.12" x2="91.44" y2="71.12" width="0.2032" layer="91"/>
+<wire x1="88.9" y1="71.12" x2="91.44" y2="71.12" width="0.2032" layer="91"/>
 <label x="91.44" y="71.12" size="1.778" layer="95"/>
 </segment>
 </net>
@@ -11087,7 +11087,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PB4(MISO)"/>
-<wire x1="86.36" y1="25.4" x2="91.44" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="25.4" x2="91.44" y2="25.4" width="0.1524" layer="91"/>
 <label x="91.44" y="25.4" size="1.778" layer="95"/>
 </segment>
 </net>
@@ -11099,7 +11099,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </segment>
 <segment>
 <pinref part="MUC" gate="G$1" pin="PB1(OC1A)"/>
-<wire x1="86.36" y1="33.02" x2="91.44" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="33.02" x2="91.44" y2="33.02" width="0.1524" layer="91"/>
 <label x="91.44" y="33.02" size="1.778" layer="95"/>
 </segment>
 </net>

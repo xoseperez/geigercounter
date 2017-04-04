@@ -342,10 +342,10 @@ UsedLibrary="/home/xose/local/eagle-6.3.0/lbr/zilog.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="35 29 1314 767"
+Loc="2061 37 2660 436"
 State=1
 Number=0
 
 [Desktop]
-Screen="1366 768"
+Screen="3840 1106"
 Window="Win_1"
